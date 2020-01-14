@@ -76,7 +76,9 @@ This brings us to the CSRF workflow:
 ## Compatibility
 
 
-Flask-RESTPlus-CSRF requires Python 3.6+
+Flask-RESTPlus-CSRF requires Python 3.6.3.  Yes, that's a pretty
+specific version of python.  We're open to other versions, but that's
+the one we need right now, so we're focused on it.
 
 
 ## Installation
@@ -85,7 +87,7 @@ You can install Flask-RESTPlus-CSRF with pip:
 
 .. code-block:: console
 
-    $ pip install flask-restplu-csrf
+    $ pip install flask-restplus-csrf
 
 
 ## Quick start
@@ -190,7 +192,28 @@ and document your endpoints.
         app.run(debug=True)
 
 
+## Dev Notes
 
+### Install Source and Setup Dev Environment
+
+If you have python3.6 installed, you are good to go.  If not, install
+it.  One way to do that is with pyenv, which can be installed with
+https://github.com/pyenv/pyenv-installer and then:
+
+    sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+         libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+         libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
+         liblzma-dev python-openssl git libedit-dev
+    pyenv install 3.6.3
+
+    git clone https://github.com/OpenTechStrategies/flask-restplus-csrf.git
+    cd flask-restplus-csrf
+    pyenv virtualenv -p python3 --prompt="[csrf] " flask-restplus-csrf
+
+### Run the demo
+
+    ~/.pyenv/versions/flask-restplus-csfr/bin/python3.6 demo.py
+    curl http://127.0.0.1:5000/hello
 
 ## Documentation
 
