@@ -63,13 +63,13 @@ doc_require = pip('doc')
 tests_require = pip('test')
 
 setup(
-    name='flask-restplus',
+    name='flask-restplus-csrf',
     version=__version__,
     description=__description__,
     long_description=long_description,
-    url='https://github.com/noirbizarre/flask-restplus',
-    author='Axel Haustant',
-    author_email='axel@data.gouv.fr',
+    url='https://github.com/opentechstrategies/flask-restplus-csrf',
+    author='James Vasile',
+    author_email='james@opentechstrategies.com',
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
     install_requires=install_requires,
@@ -80,7 +80,7 @@ setup(
     },
     license='BSD-3-Clause',
     zip_safe=False,
-    keywords='flask restplus rest api swagger openapi',
+    keywords='flask restplus csrf rest api swagger openapi',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python',
