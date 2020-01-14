@@ -69,14 +69,14 @@ This brings us to the CSRF workflow:
 4) On the server side, reject API requests that require authentication
    but do not provide one of the valid tokens.
 
-5) On logout, invalidate all the tokens, typically by destorying the
+5) On logout, invalidate all the tokens, typically by destroying the
    server's copy of them.
 
 
 ## Compatibility
 
 
-Flask-RESTPlus-CSRF requires Python 2.7 or 3.4+.
+Flask-RESTPlus-CSRF requires Python 3.6+
 
 
 ## Installation
