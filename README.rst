@@ -1,5 +1,5 @@
 ==============
-Flask RestPlus
+Flask RestPlus CSRF
 ==============
 
 .. image:: https://secure.travis-ci.org/noirbizarre/flask-restplus.svg?tag=0.12.1

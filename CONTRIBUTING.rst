@@ -1,7 +1,7 @@
 Contributing
 ============
 
-flask-restplus is open-source and very open to contributions.
+flask-restplus-csrf is open-source and open to contributions.
 
 Submitting issues
 -----------------
@@ -11,7 +11,7 @@ to submit reports on the `official bugtracker`_.
 
 Provide as much informations as possible to specify the issues:
 
-- the flask-restplus version used
+- the flask-restplus-csrf version used
 - a stacktrace
 - installed applications list
 - a code sample to reproduce the issue
