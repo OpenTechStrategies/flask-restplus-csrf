@@ -5,7 +5,7 @@ import inspect
 import six
 import warnings
 
-from flask import request
+from flask import request, session
 from flask.views import http_method_funcs
 
 from .errors import abort
@@ -108,6 +108,32 @@ class Namespace(object):
                 if 'expect' in doc[http_method] and not isinstance(doc[http_method]['expect'], (list, tuple)):
                     doc[http_method]['expect'] = [doc[http_method]['expect']]
         cls.__apidoc__ = merge(getattr(cls, '__apidoc__', {}), doc)
+
+    def csrf(self, route):
+        '''A decorator to turn csrf on for a route '''
+        def wrapper (*args, **kwargs):
+            username = self.apis[0].csrfHandler.get_username()
+            if username == '':
+                return {'message':'csrf fail',
+                        'reason': "no username"}
+
+            if not self.apis[0].csrfHandler.token_valid_p(request.values.get('csrf',''), username):
+                return {'message':'csrf fail',
+                        'reason': "invalid token",
+                        'csrf':request.values.get('csrf','empty')}
+            ret = route(*args, **kwargs)
+
+            # Add csrf token to the output.  If we reach this point, we have a
+            # username and a valid csrf token (which also implies we're logged
+            # in)
+            token = self.apis[0].csrfHandler.generate_token(username)
+            try:
+                ret['csrf'] = token
+            except TypeError:
+                pass
+
+            return ret
+        return wrapper
 
     def doc(self, shortcut=None, **kwargs):
         '''A decorator to add some api documentation to the decorated object'''

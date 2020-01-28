@@ -8,6 +8,7 @@ import logging
 import operator
 import re
 import six
+import os
 import sys
 
 from collections import OrderedDict
@@ -35,6 +36,8 @@ from .swagger import Swagger
 from .utils import default_id, camel_to_dash, unpack
 from .representations import output_json
 from ._http import HTTPStatus
+
+from .csrf import CSRF
 
 RE_RULES = re.compile('(<.*>)')
 
@@ -90,14 +93,15 @@ class Api(object):
     '''
 
     def __init__(self, app=None, version='1.0', title=None, description=None,
-            terms_url=None, license=None, license_url=None,
-            contact=None, contact_url=None, contact_email=None,
-            authorizations=None, security=None, doc='/', default_id=default_id,
-            default='default', default_label='Default namespace', validate=None,
-            tags=None, prefix='', ordered=False,
-            default_mediatype='application/json', decorators=None,
-            catch_all_404s=False, serve_challenge_on_401=False, format_checker=None,
-            **kwargs):
+                 terms_url=None, license=None, license_url=None, contact=None,
+                 contact_url=None, contact_email=None, authorizations=None,
+                 security=None, doc='/', default_id=default_id,
+                 default='default', default_label='Default namespace',
+                 validate=None, tags=None, prefix='', ordered=False,
+                 default_mediatype='application/json', decorators=None,
+                 catch_all_404s=False, serve_challenge_on_401=False,
+                 format_checker=None, csrf=False, csrf_expiry_window=1800,
+                 csrf_secret=None, **kwargs):
         self.version = version
         self.title = title or 'API'
         self.description = description
@@ -116,6 +120,17 @@ class Api(object):
         self._doc_view = None
         self._default_error_handler = None
         self.tags = tags or []
+
+        # If csrf is True, generate a generic CSRF object.  If csrf is already
+        # a csrf instance, just use that instance as our handler.  If csrf is
+        # False, don't do csrf.
+        if csrf:
+            if hasattr(csrf, 'expiry_window'):
+                self.csrfHandler = csrf
+            else:
+                self.csrfHandler = CSRF(csrf_expiry_window, csrf_secret)
+        else:
+            self.csrfHandler = None
 
         self.error_handlers = {
             ParseError: mask_parse_error_handler,
@@ -291,6 +306,8 @@ class Api(object):
         for decorator in chain(namespace.decorators, self.decorators):
             resource_func = decorator(resource_func)
 
+        resource_func = self.csrf_token_adder(resource_func)
+
         for url in urls:
             # If this Api has a blueprint
             if self.blueprint:
@@ -312,6 +329,33 @@ class Api(object):
                 rule = self._complete_url(url, '')
             # Add the url to the application or blueprint
             app.add_url_rule(rule, view_func=resource_func, **kwargs)
+
+    def csrf_token_adder(self, resource):
+        '''
+        Wraps a resource (as a flask view function),
+        to add a csrf token if the user is logged in
+
+        :param resource: The resource as a flask view function
+        '''
+        @wraps(resource)
+        def wrapper(*args, **kwargs):
+            resp = resource(*args, **kwargs)
+
+            # If there's no csrf handler, we're not doing csrf, so no need to
+            # add a token at all.
+            if not self.csrfHandler:
+                return resp
+
+            # If we're not logged in, don't add the token
+            if not self.csrfHandler.logged_in():
+                return resp
+
+            username = self.csrfHandler.get_username()
+            token = self.csrfHandler.generate_token(username)
+            data, code, headers = unpack(resp)
+            data.json['csrf'] = token
+            return self.make_response(data.json, code, headers=headers)
+        return wrapper
 
     def output(self, resource):
         '''
