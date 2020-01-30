@@ -1,13 +1,32 @@
 # Flask RestPlus CSRF
 
-Flask-RESTPlus-CSRF is a fork of Flask-RESTPlus that adds CSRF support.
+[Flask-RESTPlus-CSRF](https://github.com/OpenTechStrategies/flask-restplus-csrf)
+is a fork of
+[Flask-RESTPlus](https://github.com/noirbizarre/flask-restplus) that
+adds support for
+[CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Synchronizer_token_pattern)
+tokens.
 
-Flas-RESTPlus is an extension for `Flask`_ that adds support for
-quickly building REST APIs.  Flask-RESTPlus-CSRF encourages best
-practices with minimal setup.  If you are familiar with Flask,
-Flask-RESTPlus should be easy to pick up.  It provides a coherent
-collection of decorators and tools to describe your API and expose its
-documentation properly using `Swagger`_.
+Because `Flask-RESTPlus-CSRF` is just a small set of changes on top of
+the original `Flask-RESTPlus`, and is intended to be a drop-in
+replacement, we have left the original package's name unchanged in the
+Python namespace.  That is, this CSRF-enabled version is also
+installed as `Flask-RESTPlus`, and therefore cannot coexist with the
+original `Flask-RESTPlus` within the same project.
+
+In this document, we will usually refer to this overall package as
+"Flask-RESTPlus-CSRF" (except when we're talking about the original
+package).  However, the actual installation commands will still use
+just "flask-restplus".
+
+# About the original Flask RESTPlus
+
+Flask-RESTPlus is an extension for [Flask](http://flask.pocoo.org/)
+that adds support for quickly building REST APIs.  Flask-RESTPlus
+encourages best practices with minimal setup.  If you are familiar
+with Flask, Flask-RESTPlus should be easy to pick up.  It provides a
+coherent collection of decorators and tools to describe your API and
+expose its documentation properly using [Swagger](http://swagger.io/).
 
 ## CSRF Workflow
 
@@ -85,9 +104,9 @@ the one we need right now, so we're focused on it.
 
 You can install Flask-RESTPlus-CSRF with pip:
 
-.. code-block:: console
-
-    $ pip install flask-restplus-csrf
+```
+  $ pip install flask-restplus
+```
 
 
 ## Quick start
@@ -95,8 +114,7 @@ You can install Flask-RESTPlus-CSRF with pip:
 With Flask-RESTPlus-CSRF, you only import the api instance to route
 and document your endpoints.
 
-.. code-block:: python
-
+```
     from flask import Flask
     from flask_restplus import Api, Resource, fields
 
@@ -190,36 +208,76 @@ and document your endpoints.
 
     if __name__ == '__main__':
         app.run(debug=True)
-
+```
 
 ## Dev Notes
 
 ### Install Source and Setup Dev Environment
 
-If you have python3.6 installed, you are good to go.  If not, install
-it.  One way to do that is with pyenv, which can be installed with
-https://github.com/pyenv/pyenv-installer and then:
+If you have python3.6.3 installed, you are good to go.  If you don't,
+then you'll need to install it.  One way to do that is with `pyenv`; see
+https://gioele.io/pyenv-pipenv for a great introduction to pyenv, and
+maybe see https://github.com/pyenv/pyenv-installer for a convenient
+installer.
 
-    sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+The rest of these instructions assume that you have installed `pyenv`
+and that you're going to use it to obtain and run Python 3.6.3.  If
+you already have Python 3.6.3 by other means, it should be pretty
+clear which steps below you can skip.
+
+Using `pyenv` to get Python 3.6.3 looks something like this:
+
+```
+  # Make sure you have the prerequisites for building Python.  The
+  # list of packages for Debian and Ubuntu as of this writing is
+  # below, but check https://github.com/pyenv/pyenv/wiki for an
+  # up-to-date list of packages.
+  $ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
          libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
          libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
          liblzma-dev python-openssl git libedit-dev
-    pyenv install 3.6.3
 
-    git clone https://github.com/OpenTechStrategies/flask-restplus-csrf.git
-    cd flask-restplus-csrf
-    pyenv virtualenv -p python3 --prompt="[csrf] " flask-restplus-csrf
+  # Now you can install Python 3.6.3 via pyenv.
+  $ pyenv install 3.6.3
+```
+
+Start running Python 3.6.3 in your current shell:
+
+```
+  $ pyenv global 3.6.3
+```
+
+Once you're running Python 3.6.3 in this shell, make sure you have a
+compatible `pipenv` installed too:
+
+TODO: WIP -- working here.  -kfogel, 2020-01-30
+
+```
+  $ pip3 install pipenv
+```
+
+You may also need to install Flask itself into the current Python environment:
+
+```
+  $ pip3 install flask
+```
+
+Now you can install Flask-RESTPlus-CSRF:
+
+```
+  $ git clone https://github.com/OpenTechStrategies/flask-restplus-csrf.git
+  $ cd flask-restplus-csrf
+  $ virtualenv -p python3 --prompt="[csrf] " flask-restplus-csrf
+```
 
 ### Run the demo
 
-    ~/.pyenv/versions/flask-restplus-csfr/bin/python3.6 demo.py
-    curl http://127.0.0.1:5000/hello
+```
+  $ ~/${PYENV_HOME}/versions/flask-restplus-csfr/bin/python3.6 demo.py
+  $ curl http://127.0.0.1:5000/hello
+```
 
 ## Documentation
 
-The documentation for Flask-RESTPlus is hosted `on Read the Docs
-<http://flask-restplus.readthedocs.io/en/latest/>`_
-
-
-.. _Flask: http://flask.pocoo.org/
-.. _Swagger: http://swagger.io/
+Documentation for the original Flask-RESTPlus is hosted [on Read the
+Docs](http://flask-restplus.readthedocs.io/en/latest/).
