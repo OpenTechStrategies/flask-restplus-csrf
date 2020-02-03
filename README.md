@@ -250,7 +250,8 @@ Start running Python 3.6.3 in your current shell:
 Once you're running Python 3.6.3 in this shell, make sure you have a
 compatible `pipenv` installed too:
 
-TODO: WIP -- working here.  -kfogel, 2020-01-30
+(TODO: WORKING HERE: This documentation is currently undergoing
+editing and is incomplete.  Please watch this space for updates.)
 
 ```
   $ pip3 install pipenv
