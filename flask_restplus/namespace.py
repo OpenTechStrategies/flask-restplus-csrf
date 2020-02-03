@@ -115,12 +115,12 @@ class Namespace(object):
             username = self.apis[0].csrfHandler.get_username()
             if username == '':
                 return {'message':'csrf fail',
-                        'reason': "no username"}
+                        'reason': "no username"}, 403
 
             if not self.apis[0].csrfHandler.token_valid_p(request.values.get('csrf',''), username):
                 return {'message':'csrf fail',
                         'reason': "invalid token",
-                        'csrf':request.values.get('csrf','empty')}
+                        'csrf':request.values.get('csrf','empty')}, 403
             ret = route(*args, **kwargs)
 
             # Add csrf token to the output.  If we reach this point, we have a
