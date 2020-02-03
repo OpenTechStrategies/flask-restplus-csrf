@@ -102,10 +102,10 @@ the one we need right now, so we're focused on it.
 
 ## Installation
 
-You can install Flask-RESTPlus-CSRF with pip:
+You can install Flask-RESTPlus-CSRF with pipenv:
 
 ```
-  $ pip install flask-restplus
+  $ pipenv install -e git+https://github.com/OpenTechStrategies/flask-restplus-csrf@master#egg=flask-restplus-csrf
 ```
 
 
@@ -212,7 +212,17 @@ and document your endpoints.
 
 ## Dev Notes
 
+See https://github.com/OpenTechStrategies/flask-restplus-csrf-demo/ for
+an example usage.
+
 ### Install Source and Setup Dev Environment
+
+When doing development, you can link your webserver to this cloned version:
+
+```
+  $ pipenv install -e $PATH/TO/THIS/LIBRARY
+
+```
 
 If you have python3.6.3 installed, you are good to go.  If you don't,
 then you'll need to install it.  One way to do that is with `pyenv`; see
@@ -237,6 +247,15 @@ Using `pyenv` to get Python 3.6.3 looks something like this:
          libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
          liblzma-dev python-openssl git libedit-dev
 
+  # Install pyenv
+  $ curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+
+  # It will give you some instructions to put in your .<shell>rc file, but you can
+  # just execute on the CLI
+  $ export PATH="/home/admin/.pyenv/bin:$PATH"
+  $ eval "$(pyenv init -)"
+  $ eval "$(pyenv virtualenv-init -)"
+
   # Now you can install Python 3.6.3 via pyenv.
   $ pyenv install 3.6.3
 ```
@@ -255,6 +274,8 @@ editing and is incomplete.  Please watch this space for updates.)
 
 ```
   $ pip3 install pipenv
+  # or
+  $ sudo apt-get install pipenv
 ```
 
 You may also need to install Flask itself into the current Python environment:
